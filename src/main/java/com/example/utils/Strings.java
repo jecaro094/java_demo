@@ -2,6 +2,9 @@ package com.example.utils;
 
 import java.util.Scanner;
 
+import com.example.MathEquation;
+import com.example.MathOperation;
+
 public class Strings {
     public static void someFunc(){
         System.out.println("Some string function...");
@@ -9,7 +12,7 @@ public class Strings {
 
     // Remember to have a look at String class methods (useful)
     // Maybe use ChatGPT for that purpose.
-
+    @Deprecated
     private static char opCodeFromString(String operationName){
         return operationName.charAt(0);
     }
@@ -19,28 +22,33 @@ public class Strings {
             "zero", "one", "two", "three", "four",
             "five", "six", "seven", "eight", "nine",
         };
+        boolean isValueSet  = false;
         double value = 0;
         for(int index = 0; index < numberWords.length; index++){
             if(word.equals(numberWords[index])){
                 value = index;
+                isValueSet = true;
                 break;
             }
         }
+        if(!isValueSet)
+            value = Double.parseDouble(word);
         return value;
     }
 
     
-    private static void performOperations(String[] parts) {
-        char opCode = opCodeFromString(parts[0]);
+    public static void performOperation(String[] parts) {
+        MathOperation opCode = MathOperation.valueOf(parts[0].toUpperCase());
         double leftVal = valueFromWord(parts[1]);
         double rightVal = valueFromWord(parts[2]);
-        double result = Methods.executeFunction(opCode, leftVal, rightVal);
-        // System.out.println(result);
-        displayResult(opCode, leftVal, rightVal, result);
+        MathEquation equation = new MathEquation(opCode, leftVal, rightVal);
+        equation.execute();
+        System.out.println(equation);
     }
 
-    public static String displayResult(char opCode, double leftVal, double rightVal, double result) {
-        char symbol = symbolFromOpCode(opCode);
+    public static String displayResult(MathOperation opCode, double leftVal, double rightVal, double result) {
+        // char symbol = symbolFromOpCode(opCode);
+        char symbol = opCode.getSymbol();
 
         // In terms of efficency, it is better for memory to use 'StringBuilder'
         // rather than 'String'
@@ -60,8 +68,14 @@ public class Strings {
         return sb.toString();
     }
 
-    private static char symbolFromOpCode(char opCode){
-        char[] opCodes = {'a', 's', 'm', 'd'};
+    @Deprecated 
+    private static char symbolFromOpCode(MathOperation opCode){
+        MathOperation[] opCodes = {
+            MathOperation.ADD, 
+            MathOperation.SUBSTRACT, 
+            MathOperation.MULTIPLY, 
+            MathOperation.DIVIDE
+        };
         char[] symbols = {'+', '-', '*', '/'};
         char symbol = ' ';
         for(int index=0; index<opCodes.length; index++){
@@ -78,6 +92,6 @@ public class Strings {
         Scanner scanner = new Scanner(System.in);
         String userInput = scanner.nextLine();
         String[] parts = userInput.split(" ");
-        performOperations(parts);
+        performOperation(parts);
     }
 }

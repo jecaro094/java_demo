@@ -5,7 +5,7 @@ import com.example.utils.Strings;
 public class MathEquation {
     private double leftVal;
     private double rightVal;
-    private char opCode;
+    private MathOperation opCode;
     private double result;
 
     // STATIC = Related to the class itself, and not the object
@@ -30,17 +30,18 @@ public class MathEquation {
     // usint MathEquation()
     public MathEquation(){}
 
-    public MathEquation(char opCode){
+    public MathEquation(MathOperation opCode){
         this.opCode = opCode;
     }
 
-    public MathEquation(char opCode, double leftVal, double rightVal){
+    public MathEquation(MathOperation opCode, double leftVal, double rightVal){
         this(opCode);
         this.leftVal = leftVal;
         this.rightVal = rightVal;
     }
 
     // It is like __str__ in Python
+    @Override
     public String toString(){
         return "Equation: (" 
             + Strings.displayResult(opCode, leftVal, rightVal, result) 
@@ -49,16 +50,16 @@ public class MathEquation {
 
     public void execute(){
         switch(opCode){
-            case 'a':
+            case ADD:
                 result = this.leftVal + rightVal;
                 break;
-            case 'm':
+            case MULTIPLY:
                 result = leftVal * rightVal;
                 break;
-            case 'd':
+            case DIVIDE:
                 result = rightVal != 0 ? leftVal / rightVal : 0;
                 break;
-            case 's':
+            case SUBSTRACT:
                 result = leftVal - rightVal;
                 break;
             default:
@@ -95,7 +96,7 @@ public class MathEquation {
     public void setRightValue(double rightVal){
         this.rightVal = rightVal;
     }
-    public void setOpCode(char opCode){
+    public void setOpCode(MathOperation opCode){
         this.opCode = opCode;
     }
     

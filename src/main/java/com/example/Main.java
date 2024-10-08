@@ -3,18 +3,10 @@ package com.example;
 import com.example.utils.*;
 import com.example.MathEquation;
 
-// COMPILE
-// javac src/main/java/com/example/Main.java src/main/java/com/example/utils/*.java -d target/classes/
-
-// RUN
-// java -cp target/classes com.example.Main
-
-// RUN WITH ARGUMENTS
-// java -cp target/classes com.example.Main 'd' 100 10
-
 public class Main {
     public static void main(String[] args) {
-        performOperations();
+        // performOperations();
+        calculateOperationCommandLine(args);
     }
 
 
@@ -28,10 +20,10 @@ public class Main {
     public static void performOperations(){
 
         MathEquation[] equations = new MathEquation[4];
-        equations[0] = new MathEquation('d', 100, 50);
-        equations[1] = new MathEquation('a', 25, 92);
-        equations[2] = new MathEquation('s', 225, 17);
-        equations[3] = new MathEquation('m', 11, 3);
+        equations[0] = new MathEquation(MathOperation.DIVIDE, 100, 50);
+        equations[1] = new MathEquation(MathOperation.ADD, 25, 92);
+        equations[2] = new MathEquation(MathOperation.SUBSTRACT, 225, 17);
+        equations[3] = new MathEquation(MathOperation.MULTIPLY, 11, 3);
         for(MathEquation equation: equations){
             equation.execute();
             System.out.println(equation); // This will call to `toString()`
@@ -51,14 +43,14 @@ public class Main {
         System.out.println("Using execute overloads...");   
         System.out.println();
 
-        MathEquation equationOverload = new MathEquation('d');
+        MathEquation equationOverload = new MathEquation(MathOperation.DIVIDE);
         double leftVal = 9;
         double rightVal = 4;
         equationOverload.execute(leftVal, rightVal);
         System.out.println("Overload result with doubles: " + equationOverload.getResult());
     }
 
-    private static MathEquation create(double leftVal, double rightVal, char opCode){
+    private static MathEquation create(double leftVal, double rightVal, MathOperation opCode){
         MathEquation equation = new MathEquation();
         equation.setLeftValue(leftVal);
         equation.setRightValue(rightVal);
@@ -92,13 +84,15 @@ public class Main {
             for(double res: results)
                 System.out.println(res);
         } else if(args.length == 1 && args[0].equals(interactiveStr))
-            Strings.executeInteractively();   
+            // Strings.executeInteractively();
+            Strings.performOperation(args);
         else if(args.length == 3)
             handleCommandLine(args); 
         else
             System.out.println("Please provide an operation code and 2 numeric values...");
     }
 
+    @Deprecated
     private static void handleCommandLine(String[] args) {
         char opCode = args[0].charAt(0);
         double leftVal = Double.parseDouble(args[1]);

@@ -5,7 +5,7 @@ public class Methods {
         System.out.println("This is some test");
     }
 
-
+    @Deprecated
     public static double executeFunction(char opCode, double leftVal, double rightVal){
         double result;
         switch(opCode){
